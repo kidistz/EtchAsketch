@@ -1,5 +1,7 @@
 const grid = document.querySelector('#grid');
-const resetButton = document.querySelector('#reset')
+const resetButton = document.querySelector('#reset');
+const randomButton = document.querySelector('#random');
+let randomColor = "";
 let input = 16;
 
 // creates Grid
@@ -8,7 +10,7 @@ function createGrid () {
 		grid.innerHTML += '<div class="row"></div>';
 	}
 	const rows = document.querySelectorAll('.row');
-		rows.forEach((row) => {
+	rows.forEach((row) => {
 		for (let j = 0; j < input; j++) {
 			row.innerHTML += '<div class="grid-cell" onmouseover="colorise(this)"></div>';
 			console.log("Grid cell created");
@@ -16,18 +18,31 @@ function createGrid () {
 	});	
 }
 
-const gridCells = document.querySelectorAll('.grid-cell');
-
 // grid-cells change color on mouse hover
 function colorise(x) {
-	x.classList.add('black');
+	if (randomColor != "") {
+		x.classList.remove('black');
+		x.style.background = randomColor;
+	} else {
+		x.classList.add('black');
+	}
 }
 
-// clearing and geting input
-resetButton.addEventListener('click', () => {
-  input = prompt("new size?", 12);
+// randomize colors
+randomButton.addEventListener('click', function randomRGBA() {
+		let o = Math.round, r = Math.random, s = 255;
+    randomColor = 'rgba(' + o(r()*s) + ',' + o(r()*s) + ',' + o(r()*s) + ',' + r().toFixed(1) + ')';
+});
+
+// clearing and getting input
+resetButton.addEventListener('click', function getInput() {
+  input = prompt("Please, input new size of board (1-64)", 14);
   grid.innerHTML = "";
-  createGrid();
+  if (input <= 64) {
+  	createGrid();
+  } else {
+  	getInput();
+  } 
 });
 
 createGrid();
